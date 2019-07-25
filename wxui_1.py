@@ -37,12 +37,12 @@ class myFrame(wx.Frame):
         self.counts_set = 1000000
 
         self.note1 = wx.Notebook(self)
-        #建立page
+        # 建立page
         self.scorePanel = wx.Panel(self.note1)
         self.scorePanel_lt = wx.Panel(self.note1)
         self.note1.AddPage(self.scorePanel, "Energy")
         self.note1.AddPage(self.scorePanel_lt, "LifeTime")
-        #能量显示窗口
+        # 能量显示窗口
         self.e_gridsizer = wx.GridBagSizer(2, 2)
         self.scorePanel.SetSizer(self.e_gridsizer)
         # self.box1 = wx.ListBox(self.scorePanel,size=(800, 500))
@@ -60,7 +60,7 @@ class myFrame(wx.Frame):
         self.drawHistF = Figure(figsize=(8, 5), dpi=100)
         self.drawHistCanvas = FigureCanvas(self.box1, -1, self.drawHistF)
         self.drawHistCanvas.draw()
-        #右侧区域
+        # 右侧区域
         # self.box2 = wx.Panel(self.scorePanel, pos=(810, 0), size=(370, 500))
         # self.but1 = wx.Button(self.box2, 0, 'start', pos=(10, 10), size=(100, 50))
         # self.but2 = wx.Button(self.box2, 0, 'stop', pos=(120, 10), size=(100, 50))
@@ -328,14 +328,29 @@ class myFrame(wx.Frame):
 
         # 参数
         self.m = 3.0
+        # energy_spectrum
         self.energy_c1 = []
         self.amp_c1 = []
         self.energy_c2 = []
         self.amp_c2 = []
+        self.energy_c3 = []
+        self.amp_c3 = []
+        # lt_spectrum
+        self.energy_c1_lt = []
+        self.amp_c1_lt = []
+        self.time_c1_lt = []
+        self.energy_c2_lt = []
+        self.amp_c2_lt = []
+        self.time_c2_lt = []
+        self.energy_c3_lt = []
+        self.amp_c3_lt = []
+        self.time_c3_lt = []
+        #
         self.lifetime = []
         self.wave0 = []
         self.wave1 = []
         self.lt_spe = []
+        # 开始判断
         self.e_start_but = 0
         self.lt_start_but_switch = 0
 
@@ -554,6 +569,75 @@ class myFrame(wx.Frame):
                             #print(t_stop - t_start)
                             c_num_2 = c_num_2 + 1
                             self.total_counts = self.total_counts + 1
+
+                else:
+                    # c1
+                    t1 = tools.Wavetools(waveform0['c1'][0], waveform0['c1'][1])
+                    e_1 = t1.get_energy(0.2)
+                    amp_1 = t1.get_amplitude()
+
+                    # c2
+                    t2 = tools.Wavetools(waveform0['c2'][0], waveform0['c2'][1])
+                    e_2 = t2.get_energy(0.2)
+                    amp_2 = t2.get_amplitude()
+
+                    self.c_num_1 = self.c_num_1 + 1
+                    if e_1 > self.lt_start_l and e_1 < self.lt_start_r and e_2 > self.lt_stop_l \
+                            and e_2 < self.lt_stop_r:
+                        t_start = t1.get_time_cfd_linear(self.start_fraction)
+                        t_stop = t2.get_time_cfd_linear(self.stop_fraction)
+                        self.lifetime.append(t_stop - t_start)
+                        c_num_2 = c_num_2 + 1
+                        self.total_counts = self.total_counts + 1
+                if self.c_num_1 % 1000 == 0:
+                    self.drawHistF_lt.clf()
+                    self.a_lt = self.drawHistF_lt.add_subplot(111)
+                    self.h_lifetime = self.a_lt.hist(self.lifetime, self.lt_bins, range=(self.lt_l, self.lt_r))
+                    self.a_lt.semilogy()
+                    self.drawHistCanvas_lt.draw()
+                t_02 = time.time()
+                self.cps = c_num_2/(t_02 - t_01)
+                self.lt_cps_text.SetValue(str(int(self.cps)))
+                self.lt_counts_text.SetValue(str(self.total_counts))
+                t_01 = time.time()
+
+            self.wave1 = waveform0['c1'][1]
+            if self.total_counts > self.counts_set:
+                break
+
+    def loop_lifetime_3gamma(self):
+        self.c_num_1 = 0
+        t_01 = time.time()
+        while self.dos_0.isOpen():
+            c_num_2 = 0
+            waveform0 = self.dos_0.get_wave()
+            if operator.eq(self.wave1, waveform0['c1'][1]) == False:
+                if self.para_0['SEQ'] == 'ON':
+                    for i in range(0, self.para_0['SEQ_N']):
+                        # c1
+                        t1 = tools.Wavetools(waveform0['c1'][0][i], waveform0['c1'][1][i])
+                        e_1 = t1.get_energy(0.2)
+                        amp_1 = t1.get_amplitude()
+
+                        # c2
+                        t2 = tools.Wavetools(waveform0['c2'][0][i], waveform0['c2'][1][i])
+                        e_2 = t2.get_energy(0.2)
+                        amp_2 = t2.get_amplitude()
+
+                        # c3
+                        t3 = tools.Wavetools(waveform0['c3'][0][i], waveform0['c3'][1][i])
+                        e_3 = t3.get_energy(0.2)
+                        amp_3 = t3.get_amplitude()
+                        self.c_num_1 = self.c_num_1 + 1
+
+                        # if e_1 > self.lt_start_l and e_1 < self.lt_start_r \
+                        #         and e_2 > self.lt_stop_l and e_2 < self.lt_stop_r :
+                        #     t_start = t1.get_time_cfd_linear(self.start_fraction)
+                        #     t_stop = t2.get_time_cfd_linear(self.stop_fraction)
+                        #     self.lifetime.append(t_stop - t_start)
+                        #     #print(t_stop - t_start)
+                        #     c_num_2 = c_num_2 + 1
+                        #     self.total_counts = self.total_counts + 1
 
                 else:
                     # c1
