@@ -35,6 +35,13 @@ class myFrame(wx.Frame):
         self.lt_r = 10.0
         self.total_counts = 0
         self.counts_set = 1000000
+        self.thr_gamma_data = {'c1_t': [], 'c2_t': [], 'c3_t': []}
+        self.thr_gamma_data['e_1'] = []
+        self.thr_gamma_data['e_2'] = []
+        self.thr_gamma_data['e_3'] = []
+        self.thr_gamma_data['amp_1'] = []
+        self.thr_gamma_data['amp_2'] = []
+        self.thr_gamma_data['amp_3'] = []
 
         self.note1 = wx.Notebook(self)
         # 建立page
@@ -649,6 +656,11 @@ class myFrame(wx.Frame):
                     t2 = tools.Wavetools(waveform0['c2'][0], waveform0['c2'][1])
                     e_2 = t2.get_energy(0.2)
                     amp_2 = t2.get_amplitude()
+
+                    # c3
+                    t3 = tools.Wavetools(waveform0['c3'][0][i], waveform0['c3'][1][i])
+                    e_3 = t3.get_energy(0.2)
+                    amp_3 = t3.get_amplitude()
 
                     self.c_num_1 = self.c_num_1 + 1
                     if e_1 > self.lt_start_l and e_1 < self.lt_start_r and e_2 > self.lt_stop_l \
