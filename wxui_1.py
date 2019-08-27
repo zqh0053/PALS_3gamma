@@ -640,21 +640,24 @@ class myFrame(wx.Frame):
                         t1 = tools.Wavetools(waveform0['c1'][0][i], waveform0['c1'][1][i])
                         e_1 = t1.get_energy(0.2)
                         amp_1 = t1.get_amplitude()
+                        c1_t = t1.get_time_cfd_linear(self.start_fraction)
 
                         # c2
                         t2 = tools.Wavetools(waveform0['c2'][0][i], waveform0['c2'][1][i])
                         e_2 = t2.get_energy(0.2)
                         amp_2 = t2.get_amplitude()
+                        c2_t = t2.get_time_cfd_linear(self.stop_fraction)
 
                         # c3
                         t3 = tools.Wavetools(waveform0['c3'][0][i], waveform0['c3'][1][i])
                         e_3 = t3.get_energy(0.2)
                         amp_3 = t3.get_amplitude()
+                        c3_t = t3.get_time_cfd_linear(self.stop_fraction)
                         self.c_num_1 = self.c_num_1 + 1
 
-                        self.thr_gamma_data['c1_t'].append(t1)
-                        self.thr_gamma_data['c2_t'].append(t2)
-                        self.thr_gamma_data['c3_t'].append(t3)
+                        self.thr_gamma_data['c1_t'].append(c1_t)
+                        self.thr_gamma_data['c2_t'].append(c2_t)
+                        self.thr_gamma_data['c3_t'].append(c3_t)
                         self.thr_gamma_data['e_1'].append(e_1)
                         self.thr_gamma_data['e_2'].append(e_2)
                         self.thr_gamma_data['e_3'].append(e_3)
@@ -673,24 +676,27 @@ class myFrame(wx.Frame):
 
                 else:
                     # c1
-                    t1 = tools.Wavetools(waveform0['c1'][0], waveform0['c1'][1])
+                    t1 = tools.Wavetools(waveform0['c1'][0][i], waveform0['c1'][1][i])
                     e_1 = t1.get_energy(0.2)
                     amp_1 = t1.get_amplitude()
+                    c1_t = t1.get_time_cfd_linear(self.start_fraction)
 
                     # c2
-                    t2 = tools.Wavetools(waveform0['c2'][0], waveform0['c2'][1])
+                    t2 = tools.Wavetools(waveform0['c2'][0][i], waveform0['c2'][1][i])
                     e_2 = t2.get_energy(0.2)
                     amp_2 = t2.get_amplitude()
+                    c2_t = t2.get_time_cfd_linear(self.stop_fraction)
 
                     # c3
                     t3 = tools.Wavetools(waveform0['c3'][0][i], waveform0['c3'][1][i])
                     e_3 = t3.get_energy(0.2)
                     amp_3 = t3.get_amplitude()
+                    c3_t = t3.get_time_cfd_linear(self.stop_fraction)
 
                     self.c_num_1 = self.c_num_1 + 1
-                    self.thr_gamma_data['c1_t'].append(t1)
-                    self.thr_gamma_data['c2_t'].append(t2)
-                    self.thr_gamma_data['c3_t'].append(t3)
+                    self.thr_gamma_data['c1_t'].append(c1_t)
+                    self.thr_gamma_data['c2_t'].append(c2_t)
+                    self.thr_gamma_data['c3_t'].append(c3_t)
                     self.thr_gamma_data['e_1'].append(e_1)
                     self.thr_gamma_data['e_2'].append(e_2)
                     self.thr_gamma_data['e_3'].append(e_3)
