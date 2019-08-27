@@ -470,18 +470,33 @@ class myFrame(wx.Frame):
         self.th1.start()
 
     def run_loop_lt(self):
-        self.th2 = threading.Thread(target=self.loop_lifetime_test)
+        # self.th2 = threading.Thread(target=self.loop_lifetime_test)
+        self.th2 = threading.Thread(target=self.loop_test)
         self.th2.start()
 
     def loop_test(self):
         while self.dos_0.isOpen():
+            # self.drawHistF.clf()
+            # self.a = self.drawHistF.add_subplot(111)
+            # self.t = np.arange(0.0, self.m, 0.01)
+            # self.s = np.sin(2 * np.pi * self.t)
+            # self.a.plot(self.t, self.s)
+            # self.a.semilogy()
+            # self.a.set_xlim((-1.5, 10.3))
+            # self.a.set_xlabel('asd')
+            # # drawHistCanvas = FigureCanvas(box1, -1, drawHistF)
+            # self.drawHistCanvas.draw()
+            # if self.m > 10.0:
+            #     self.m = self.m - 7
+            # self.m = self.m + 0.1
+            # time.sleep(0.01)
             self.drawHistF.clf()
             self.a = self.drawHistF.add_subplot(111)
             self.t = np.arange(0.0, self.m, 0.01)
             self.s = np.sin(2 * np.pi * self.t)
-            self.a.plot(self.t, self.s)
-            self.a.semilogy()
-            self.a.set_xlim((-1.5, 10.3))
+            np.random.seed(19601)
+            data = np.random.randn(2, 10000)
+            self.a.hist2d(data[0], data[1], bins = 100)
             self.a.set_xlabel('asd')
             # drawHistCanvas = FigureCanvas(box1, -1, drawHistF)
             self.drawHistCanvas.draw()
@@ -637,6 +652,16 @@ class myFrame(wx.Frame):
                         amp_3 = t3.get_amplitude()
                         self.c_num_1 = self.c_num_1 + 1
 
+                        self.thr_gamma_data['c1_t'].append(t1)
+                        self.thr_gamma_data['c2_t'].append(t2)
+                        self.thr_gamma_data['c3_t'].append(t3)
+                        self.thr_gamma_data['e_1'].append(e_1)
+                        self.thr_gamma_data['e_2'].append(e_2)
+                        self.thr_gamma_data['e_3'].append(e_3)
+                        self.thr_gamma_data['amp_1'].append(amp_1)
+                        self.thr_gamma_data['amp_2'].append(amp_2)
+                        self.thr_gamma_data['amp_3'].append(amp_3)
+
                         # if e_1 > self.lt_start_l and e_1 < self.lt_start_r \
                         #         and e_2 > self.lt_stop_l and e_2 < self.lt_stop_r :
                         #     t_start = t1.get_time_cfd_linear(self.start_fraction)
@@ -663,13 +688,22 @@ class myFrame(wx.Frame):
                     amp_3 = t3.get_amplitude()
 
                     self.c_num_1 = self.c_num_1 + 1
-                    if e_1 > self.lt_start_l and e_1 < self.lt_start_r and e_2 > self.lt_stop_l \
-                            and e_2 < self.lt_stop_r:
-                        t_start = t1.get_time_cfd_linear(self.start_fraction)
-                        t_stop = t2.get_time_cfd_linear(self.stop_fraction)
-                        self.lifetime.append(t_stop - t_start)
-                        c_num_2 = c_num_2 + 1
-                        self.total_counts = self.total_counts + 1
+                    self.thr_gamma_data['c1_t'].append(t1)
+                    self.thr_gamma_data['c2_t'].append(t2)
+                    self.thr_gamma_data['c3_t'].append(t3)
+                    self.thr_gamma_data['e_1'].append(e_1)
+                    self.thr_gamma_data['e_2'].append(e_2)
+                    self.thr_gamma_data['e_3'].append(e_3)
+                    self.thr_gamma_data['amp_1'].append(amp_1)
+                    self.thr_gamma_data['amp_2'].append(amp_2)
+                    self.thr_gamma_data['amp_3'].append(amp_3)
+                    # if e_1 > self.lt_start_l and e_1 < self.lt_start_r and e_2 > self.lt_stop_l \
+                    #         and e_2 < self.lt_stop_r:
+                    #     t_start = t1.get_time_cfd_linear(self.start_fraction)
+                    #     t_stop = t2.get_time_cfd_linear(self.stop_fraction)
+                    #     self.lifetime.append(t_stop - t_start)
+                    #     c_num_2 = c_num_2 + 1
+                    #     self.total_counts = self.total_counts + 1
                 if self.c_num_1 % 1000 == 0:
                     self.drawHistF_lt.clf()
                     self.a_lt = self.drawHistF_lt.add_subplot(111)
