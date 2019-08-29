@@ -47,8 +47,10 @@ class myFrame(wx.Frame):
         # 建立page
         self.scorePanel = wx.Panel(self.note1)
         self.scorePanel_lt = wx.Panel(self.note1)
+        self.scorePanel_life3g = wx.Panel(self.note1)
         self.note1.AddPage(self.scorePanel, "Energy")
         self.note1.AddPage(self.scorePanel_lt, "LifeTime")
+        self.note1.AddPage(self.scorePanel_life3g, "3gamma")
         # 能量显示窗口
         self.e_gridsizer = wx.GridBagSizer(2, 2)
         self.scorePanel.SetSizer(self.e_gridsizer)
@@ -142,7 +144,7 @@ class myFrame(wx.Frame):
         # energy_c2_set
         self.eb3c2_gridsizer = wx.GridBagSizer(6, 4)
         self.eb3_c2_panel.SetSizer(self.eb3c2_gridsizer)
-        self.eb3c2_title = wx.StaticText(self.eb3_c2_panel, -1, label='channel 1', style=wx.ALIGN_CENTER)
+        self.eb3c2_title = wx.StaticText(self.eb3_c2_panel, -1, label='channel 2', style=wx.ALIGN_CENTER)
         self.eb3c2_title.SetFont(self.font1)
         self.eb3c2_gridsizer.Add(self.eb3c2_title, span=(1, 4), pos=(0, 0), flag=wx.EXPAND)
         #
@@ -333,6 +335,37 @@ class myFrame(wx.Frame):
         self.ltb3c2_but1.Bind(wx.EVT_BUTTON, self.lt_sp_set)
         self.ltb3c2_gridsizer.Add(self.ltb3c2_but1, span=(1, 2), pos=(4, 1), flag=wx.EXPAND)
 
+        # 3gamma_page
+        self.life3g_gridsizer = wx.GridBagSizer(2, 2)
+        self.scorePanel_life3g.SetSizer(self.life3g_gridsizer)
+        # self.life3g_box1 = wx.ListBox(self.scorePanel_life3g,size=(800, 500))
+        # self.drawHistF = Figure(figsize=(8, 5), dpi=100)
+        # self.drawHistCanvas = FigureCanvas(self.life3g_box1, -1, self.drawHistF)
+        # self.drawHistCanvas.draw()
+        self.life3g_box1 = wx.ListBox(self.scorePanel_life3g, size=(600, 600))
+        self.life3g_gridsizer.Add(self.life3g_box1, pos=(0, 0), flag=wx.EXPAND)
+        self.life3g_box2 = wx.Panel(self.scorePanel_life3g)
+        self.life3g_gridsizer.Add(self.life3g_box2, pos=(0, 1), flag=wx.EXPAND)
+        self.life3g_box3 = wx.Panel(self.scorePanel_life3g)
+        self.life3g_gridsizer.Add(self.life3g_box3, span=(1, 2), pos=(1, 0), flag=wx.EXPAND)
+        self.scorePanel_life3g.Fit()
+
+        self.drawHistF_life3g = Figure(figsize=(6, 6), dpi=100)
+        self.drawHistCanvas_life3g = FigureCanvas(self.life3g_box1, -1, self.drawHistF_life3g)
+        self.drawHistCanvas_life3g.draw()
+
+        # 右侧
+        self.life3gb2_gridsizer = wx.GridBagSizer(3, 1)
+        self.life3g_box2.SetSizer(self.life3gb2_gridsizer)
+        self.life3g_b2_c1 = wx.Panel(self.life3g_box2)
+        self.life3gb2_gridsizer.Add(self.life3g_b2_c1, pos=(0, 0), flag=wx.EXPAND)
+        self.life3g_b2_c2 = wx.Panel(self.life3g_box2)
+        self.life3gb2_gridsizer.Add(self.life3g_b2_c2, pos=(0, 1), flag=wx.EXPAND)
+        self.life3g_b2_c3 = wx.Panel(self.life3g_box2)
+        self.life3gb2_gridsizer.Add(self.life3g_b2_c3, pos=(0, 2), flag=wx.EXPAND)
+        # channel1
+
+
         # 参数
         self.m = 3.0
         # energy_spectrum
@@ -470,8 +503,8 @@ class myFrame(wx.Frame):
         self.th1.start()
 
     def run_loop_lt(self):
-        # self.th2 = threading.Thread(target=self.loop_lifetime_test)
-        self.th2 = threading.Thread(target=self.loop_test)
+        self.th2 = threading.Thread(target=self.loop_lifetime_test)
+        # self.th2 = threading.Thread(target=self.loop_test)
         self.th2.start()
 
     def loop_test(self):
@@ -653,17 +686,21 @@ class myFrame(wx.Frame):
                         e_3 = t3.get_energy(0.2)
                         amp_3 = t3.get_amplitude()
                         c3_t = t3.get_time_cfd_linear(self.stop_fraction)
+
                         self.c_num_1 = self.c_num_1 + 1
 
-                        self.thr_gamma_data['c1_t'].append(c1_t)
-                        self.thr_gamma_data['c2_t'].append(c2_t)
-                        self.thr_gamma_data['c3_t'].append(c3_t)
-                        self.thr_gamma_data['e_1'].append(e_1)
-                        self.thr_gamma_data['e_2'].append(e_2)
-                        self.thr_gamma_data['e_3'].append(e_3)
-                        self.thr_gamma_data['amp_1'].append(amp_1)
-                        self.thr_gamma_data['amp_2'].append(amp_2)
-                        self.thr_gamma_data['amp_3'].append(amp_3)
+                        if e_2 > self.lt_start_l and e_2 < self.lt_start_r \
+                                and e_3 > self.lt_stop_l and e_3 < self.lt_stop_r :
+                            self.thr_gamma_data['c1_t'].append(c1_t)
+                            self.thr_gamma_data['c2_t'].append(c2_t)
+                            self.thr_gamma_data['c3_t'].append(c3_t)
+                            self.thr_gamma_data['e_1'].append(e_1)
+                            self.thr_gamma_data['e_2'].append(e_2)
+                            self.thr_gamma_data['e_3'].append(e_3)
+                            self.thr_gamma_data['amp_1'].append(amp_1)
+                            self.thr_gamma_data['amp_2'].append(amp_2)
+                            self.thr_gamma_data['amp_3'].append(amp_3)
+                            c_num_2 = c_num_2 + 1
 
                         # if e_1 > self.lt_start_l and e_1 < self.lt_start_r \
                         #         and e_2 > self.lt_stop_l and e_2 < self.lt_stop_r :
@@ -692,17 +729,19 @@ class myFrame(wx.Frame):
                     e_3 = t3.get_energy(0.2)
                     amp_3 = t3.get_amplitude()
                     c3_t = t3.get_time_cfd_linear(self.stop_fraction)
-
                     self.c_num_1 = self.c_num_1 + 1
-                    self.thr_gamma_data['c1_t'].append(c1_t)
-                    self.thr_gamma_data['c2_t'].append(c2_t)
-                    self.thr_gamma_data['c3_t'].append(c3_t)
-                    self.thr_gamma_data['e_1'].append(e_1)
-                    self.thr_gamma_data['e_2'].append(e_2)
-                    self.thr_gamma_data['e_3'].append(e_3)
-                    self.thr_gamma_data['amp_1'].append(amp_1)
-                    self.thr_gamma_data['amp_2'].append(amp_2)
-                    self.thr_gamma_data['amp_3'].append(amp_3)
+                    if e_2 > self.lt_start_l and e_2 < self.lt_start_r \
+                            and e_3 > self.lt_stop_l and e_3 < self.lt_stop_r:
+                        self.thr_gamma_data['c1_t'].append(c1_t)
+                        self.thr_gamma_data['c2_t'].append(c2_t)
+                        self.thr_gamma_data['c3_t'].append(c3_t)
+                        self.thr_gamma_data['e_1'].append(e_1)
+                        self.thr_gamma_data['e_2'].append(e_2)
+                        self.thr_gamma_data['e_3'].append(e_3)
+                        self.thr_gamma_data['amp_1'].append(amp_1)
+                        self.thr_gamma_data['amp_2'].append(amp_2)
+                        self.thr_gamma_data['amp_3'].append(amp_3)
+                        c_num_2 = c_num_2 + 1
                     # if e_1 > self.lt_start_l and e_1 < self.lt_start_r and e_2 > self.lt_stop_l \
                     #         and e_2 < self.lt_stop_r:
                     #     t_start = t1.get_time_cfd_linear(self.start_fraction)
