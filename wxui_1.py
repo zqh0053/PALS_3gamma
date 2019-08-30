@@ -35,6 +35,8 @@ class myFrame(wx.Frame):
         self.lt_r = 10.0
         self.total_counts = 0
         self.counts_set = 1000000
+        self.total3g_counts = 0
+        self.counts3g_set = 1000000
         self.thr_gamma_data = {'c1_t': [], 'c2_t': [], 'c3_t': []}
         self.thr_gamma_data['e_1'] = []
         self.thr_gamma_data['e_2'] = []
@@ -42,6 +44,22 @@ class myFrame(wx.Frame):
         self.thr_gamma_data['amp_1'] = []
         self.thr_gamma_data['amp_2'] = []
         self.thr_gamma_data['amp_3'] = []
+        #3g
+        self.lt3gc1_d = 10.
+        self.lt3gc1_u = 300.
+        self.lt3gc1_l = 0.
+        self.lt3gc1_r = 200.
+        self.lt3gc1_fraction = 0.15
+        self.lt3gc2_d = 10.
+        self.lt3gc2_u = 300.
+        self.lt3gc2_l = 0.
+        self.lt3gc2_r = 200.
+        self.lt3gc2_fraction = 0.15
+        self.lt3gc3_d = 10.
+        self.lt3gc3_u = 300.
+        self.lt3gc3_l = 0.
+        self.lt3gc3_r = 200.
+        self.lt3gc3_fraction = 0.15
 
         self.note1 = wx.Notebook(self)
         # 建立page
@@ -360,12 +378,148 @@ class myFrame(wx.Frame):
         self.life3g_b2_c1 = wx.Panel(self.life3g_box2)
         self.life3gb2_gridsizer.Add(self.life3g_b2_c1, pos=(0, 0), flag=wx.EXPAND)
         self.life3g_b2_c2 = wx.Panel(self.life3g_box2)
-        self.life3gb2_gridsizer.Add(self.life3g_b2_c2, pos=(0, 1), flag=wx.EXPAND)
+        self.life3gb2_gridsizer.Add(self.life3g_b2_c2, pos=(1, 0), flag=wx.EXPAND)
         self.life3g_b2_c3 = wx.Panel(self.life3g_box2)
-        self.life3gb2_gridsizer.Add(self.life3g_b2_c3, pos=(0, 2), flag=wx.EXPAND)
+        self.life3gb2_gridsizer.Add(self.life3g_b2_c3, pos=(2, 0), flag=wx.EXPAND)
         # channel1
+        self.lt3gb2c1_gridsizer = wx.GridBagSizer(6, 3)
+        self.life3g_b2_c1.SetSizer(self.lt3gb2c1_gridsizer)
+        self.lt3gb2c1_box1 = wx.ListBox(self.life3g_b2_c1, size=(300, 180))
+        self.lt3gb2c1_gridsizer.Add(self.lt3gb2c1_box1, span=(6, 1), pos=(0, 0), flag=wx.EXPAND)
+        self.drawHistF_life3gc1 = Figure(figsize=(3, 1.8), dpi=100)
+        self.drawHistCanvas_life3gc1 = FigureCanvas(self.life3g_b2_c1, -1, self.drawHistF_life3gc1)
+        self.drawHistCanvas_life3gc1.draw()
 
+        self.lt3gb2c1_down_text = wx.StaticText(self.life3g_b2_c1, -1, 'down', style=wx.ALIGN_CENTER)
+        self.lt3gb2c1_down_text.SetFont(self.font1)
+        self.lt3gb2c1_gridsizer.Add(self.lt3gb2c1_down_text, span=(1, 1), pos=(0, 1), flag=wx.EXPAND)
+        self.lt3gb2c1_down = wx.TextCtrl(self.life3g_b2_c1, -1, str(self.lt3gc1_d), style=wx.TE_CENTER)
+        self.lt3gb2c1_gridsizer.Add(self.lt3gb2c1_down, span=(1, 1), pos=(0, 2), flag=wx.EXPAND)
+        self.lt3gb2c1_up_text = wx.StaticText(self.life3g_b2_c1, -1, 'up', style=wx.ALIGN_CENTER)
+        self.lt3gb2c1_up_text.SetFont(self.font1)
+        self.lt3gb2c1_gridsizer.Add(self.lt3gb2c1_up_text, span=(1, 1), pos=(1, 1), flag=wx.EXPAND)
+        self.lt3gb2c1_up = wx.TextCtrl(self.life3g_b2_c1, -1, str(self.lt3gc1_u), style=wx.TE_CENTER)
+        self.lt3gb2c1_gridsizer.Add(self.lt3gb2c1_up, span=(1, 1), pos=(1, 2), flag=wx.EXPAND)
+        self.lt3gb2c1_frac_text = wx.StaticText(self.life3g_b2_c1, -1, 'fraction', style=wx.ALIGN_CENTER)
+        self.lt3gb2c1_frac_text.SetFont(self.font1)
+        self.lt3gb2c1_gridsizer.Add(self.lt3gb2c1_frac_text, span=(1, 1), pos=(2, 1), flag=wx.EXPAND)
+        self.lt3gb2c1_frac = wx.TextCtrl(self.life3g_b2_c1, -1, str(self.lt3gc1_fraction), style=wx.TE_CENTER)
+        self.lt3gb2c1_gridsizer.Add(self.lt3gb2c1_frac, span=(1, 1), pos=(2, 2), flag=wx.EXPAND)
+        self.lt3gb2c1_left_text = wx.StaticText(self.life3g_b2_c1, -1, 'left', style=wx.ALIGN_CENTER)
+        self.lt3gb2c1_left_text.SetFont(self.font1)
+        self.lt3gb2c1_gridsizer.Add(self.lt3gb2c1_left_text, span=(1, 1), pos=(3, 1), flag=wx.EXPAND)
+        self.lt3gb2c1_left = wx.TextCtrl(self.life3g_b2_c1, -1, str(self.lt3gc1_l), style=wx.TE_CENTER)
+        self.lt3gb2c1_gridsizer.Add(self.lt3gb2c1_left, span=(1, 1), pos=(3, 2), flag=wx.EXPAND)
+        self.lt3gb2c1_right_text = wx.StaticText(self.life3g_b2_c1, -1, 'right', style=wx.ALIGN_CENTER)
+        self.lt3gb2c1_right_text.SetFont(self.font1)
+        self.lt3gb2c1_gridsizer.Add(self.lt3gb2c1_right_text, span=(1, 1), pos=(4, 1), flag=wx.EXPAND)
+        self.lt3gb2c1_right = wx.TextCtrl(self.life3g_b2_c1, -1, str(self.lt3gc1_r), style=wx.TE_CENTER)
+        self.lt3gb2c1_gridsizer.Add(self.lt3gb2c1_right, span=(1, 1), pos=(4, 2), flag=wx.EXPAND)
+        self.lt3gb2c1_but1 = wx.Button(self.life3g_b2_c1, -1, 'set', size=(200, 30))
+        self.lt3gb2c1_but1.Bind(wx.EVT_BUTTON, self.lt3gb2c1_set)
+        self.lt3gb2c1_gridsizer.Add(self.lt3gb2c1_but1, span=(1, 2), pos=(5, 1), flag=wx.EXPAND)
 
+        # channel1
+        self.lt3gb2c2_gridsizer = wx.GridBagSizer(6, 3)
+        self.life3g_b2_c2.SetSizer(self.lt3gb2c2_gridsizer)
+        self.lt3gb2c2_box1 = wx.ListBox(self.life3g_b2_c2, size=(300, 180))
+        self.lt3gb2c2_gridsizer.Add(self.lt3gb2c2_box1, span=(6, 1), pos=(0, 0), flag=wx.EXPAND)
+        self.drawHistF_life3gc2 = Figure(figsize=(3, 1.8), dpi=100)
+        self.drawHistCanvas_life3gc2 = FigureCanvas(self.life3g_b2_c2, -1, self.drawHistF_life3gc2)
+        self.drawHistCanvas_life3gc2.draw()
+
+        self.lt3gb2c2_down_text = wx.StaticText(self.life3g_b2_c2, -1, 'down', style=wx.ALIGN_CENTER)
+        self.lt3gb2c2_down_text.SetFont(self.font1)
+        self.lt3gb2c2_gridsizer.Add(self.lt3gb2c2_down_text, span=(1, 1), pos=(0, 1), flag=wx.EXPAND)
+        self.lt3gb2c2_down = wx.TextCtrl(self.life3g_b2_c2, -1, str(self.lt3gc2_d), style=wx.TE_CENTER)
+        self.lt3gb2c2_gridsizer.Add(self.lt3gb2c2_down, span=(1, 1), pos=(0, 2), flag=wx.EXPAND)
+        self.lt3gb2c2_up_text = wx.StaticText(self.life3g_b2_c2, -1, 'up', style=wx.ALIGN_CENTER)
+        self.lt3gb2c2_up_text.SetFont(self.font1)
+        self.lt3gb2c2_gridsizer.Add(self.lt3gb2c2_up_text, span=(1, 1), pos=(1, 1), flag=wx.EXPAND)
+        self.lt3gb2c2_up = wx.TextCtrl(self.life3g_b2_c2, -1, str(self.lt3gc2_u), style=wx.TE_CENTER)
+        self.lt3gb2c2_gridsizer.Add(self.lt3gb2c2_up, span=(1, 1), pos=(1, 2), flag=wx.EXPAND)
+        self.lt3gb2c2_frac_text = wx.StaticText(self.life3g_b2_c2, -1, 'fraction', style=wx.ALIGN_CENTER)
+        self.lt3gb2c2_frac_text.SetFont(self.font1)
+        self.lt3gb2c2_gridsizer.Add(self.lt3gb2c2_frac_text, span=(1, 1), pos=(2, 1), flag=wx.EXPAND)
+        self.lt3gb2c2_frac = wx.TextCtrl(self.life3g_b2_c2, -1, str(self.lt3gc2_fraction), style=wx.TE_CENTER)
+        self.lt3gb2c2_gridsizer.Add(self.lt3gb2c2_frac, span=(1, 1), pos=(2, 2), flag=wx.EXPAND)
+        self.lt3gb2c2_left_text = wx.StaticText(self.life3g_b2_c2, -1, 'left', style=wx.ALIGN_CENTER)
+        self.lt3gb2c2_left_text.SetFont(self.font1)
+        self.lt3gb2c2_gridsizer.Add(self.lt3gb2c2_left_text, span=(1, 1), pos=(3, 1), flag=wx.EXPAND)
+        self.lt3gb2c2_left = wx.TextCtrl(self.life3g_b2_c2, -1, str(self.lt3gc2_l), style=wx.TE_CENTER)
+        self.lt3gb2c2_gridsizer.Add(self.lt3gb2c2_left, span=(1, 1), pos=(3, 2), flag=wx.EXPAND)
+        self.lt3gb2c2_right_text = wx.StaticText(self.life3g_b2_c2, -1, 'right', style=wx.ALIGN_CENTER)
+        self.lt3gb2c2_right_text.SetFont(self.font1)
+        self.lt3gb2c2_gridsizer.Add(self.lt3gb2c2_right_text, span=(1, 1), pos=(4, 1), flag=wx.EXPAND)
+        self.lt3gb2c2_right = wx.TextCtrl(self.life3g_b2_c2, -1, str(self.lt3gc2_r), style=wx.TE_CENTER)
+        self.lt3gb2c2_gridsizer.Add(self.lt3gb2c2_right, span=(1, 1), pos=(4, 2), flag=wx.EXPAND)
+        self.lt3gb2c2_but1 = wx.Button(self.life3g_b2_c2, -1, 'set', size=(200, 30))
+        self.lt3gb2c2_but1.Bind(wx.EVT_BUTTON, self.lt3gb2c2_set)
+        self.lt3gb2c2_gridsizer.Add(self.lt3gb2c2_but1, span=(1, 2), pos=(5, 1), flag=wx.EXPAND)
+
+        # c3
+        self.lt3gb2c3_gridsizer = wx.GridBagSizer(6, 3)
+        self.life3g_b2_c3.SetSizer(self.lt3gb2c3_gridsizer)
+        self.lt3gb2c3_box1 = wx.ListBox(self.life3g_b2_c3, size=(300, 180))
+        self.lt3gb2c3_gridsizer.Add(self.lt3gb2c3_box1, span=(6, 1), pos=(0, 0), flag=wx.EXPAND)
+        self.drawHistF_life3gc3 = Figure(figsize=(3, 1.8), dpi=100)
+        self.drawHistCanvas_life3gc3 = FigureCanvas(self.life3g_b2_c3, -1, self.drawHistF_life3gc3)
+        self.drawHistCanvas_life3gc3.draw()
+
+        self.lt3gb2c3_down_text = wx.StaticText(self.life3g_b2_c3, -1, 'down', style=wx.ALIGN_CENTER)
+        self.lt3gb2c3_down_text.SetFont(self.font1)
+        self.lt3gb2c3_gridsizer.Add(self.lt3gb2c3_down_text, span=(1, 1), pos=(0, 1), flag=wx.EXPAND)
+        self.lt3gb2c3_down = wx.TextCtrl(self.life3g_b2_c3, -1, str(self.lt3gc3_d), style=wx.TE_CENTER)
+        self.lt3gb2c3_gridsizer.Add(self.lt3gb2c3_down, span=(1, 1), pos=(0, 2), flag=wx.EXPAND)
+        self.lt3gb2c3_up_text = wx.StaticText(self.life3g_b2_c3, -1, 'up', style=wx.ALIGN_CENTER)
+        self.lt3gb2c3_up_text.SetFont(self.font1)
+        self.lt3gb2c3_gridsizer.Add(self.lt3gb2c3_up_text, span=(1, 1), pos=(1, 1), flag=wx.EXPAND)
+        self.lt3gb2c3_up = wx.TextCtrl(self.life3g_b2_c3, -1, str(self.lt3gc3_u), style=wx.TE_CENTER)
+        self.lt3gb2c3_gridsizer.Add(self.lt3gb2c3_up, span=(1, 1), pos=(1, 2), flag=wx.EXPAND)
+        self.lt3gb2c3_frac_text = wx.StaticText(self.life3g_b2_c3, -1, 'fraction', style=wx.ALIGN_CENTER)
+        self.lt3gb2c3_frac_text.SetFont(self.font1)
+        self.lt3gb2c3_gridsizer.Add(self.lt3gb2c3_frac_text, span=(1, 1), pos=(2, 1), flag=wx.EXPAND)
+        self.lt3gb2c3_frac = wx.TextCtrl(self.life3g_b2_c3, -1, str(self.lt3gc3_fraction), style=wx.TE_CENTER)
+        self.lt3gb2c3_gridsizer.Add(self.lt3gb2c3_frac, span=(1, 1), pos=(2, 2), flag=wx.EXPAND)
+        self.lt3gb2c3_left_text = wx.StaticText(self.life3g_b2_c3, -1, 'left', style=wx.ALIGN_CENTER)
+        self.lt3gb2c3_left_text.SetFont(self.font1)
+        self.lt3gb2c3_gridsizer.Add(self.lt3gb2c3_left_text, span=(1, 1), pos=(3, 1), flag=wx.EXPAND)
+        self.lt3gb2c3_left = wx.TextCtrl(self.life3g_b2_c3, -1, str(self.lt3gc3_l), style=wx.TE_CENTER)
+        self.lt3gb2c3_gridsizer.Add(self.lt3gb2c3_left, span=(1, 1), pos=(3, 2), flag=wx.EXPAND)
+        self.lt3gb2c3_right_text = wx.StaticText(self.life3g_b2_c3, -1, 'right', style=wx.ALIGN_CENTER)
+        self.lt3gb2c3_right_text.SetFont(self.font1)
+        self.lt3gb2c3_gridsizer.Add(self.lt3gb2c3_right_text, span=(1, 1), pos=(4, 1), flag=wx.EXPAND)
+        self.lt3gb2c3_right = wx.TextCtrl(self.life3g_b2_c3, -1, str(self.lt3gc3_r), style=wx.TE_CENTER)
+        self.lt3gb2c3_gridsizer.Add(self.lt3gb2c3_right, span=(1, 1), pos=(4, 2), flag=wx.EXPAND)
+        self.lt3gb2c3_but1 = wx.Button(self.life3g_b2_c3, -1, 'set', size=(200, 30))
+        self.lt3gb2c3_but1.Bind(wx.EVT_BUTTON, self.lt3gb2c3_set)
+        self.lt3gb2c3_gridsizer.Add(self.lt3gb2c3_but1, span=(1, 2), pos=(5, 1), flag=wx.EXPAND)
+
+        # 下方
+        self.lt3gb3_gridsizer = wx.GridBagSizer(1, 4)
+        self.life3g_box3.SetSizer(self.ltb3_gridsizer)
+        self.lt3gb3_a1 = wx.Panel(self.life3g_box3)
+        self.lt3gb3_gridsizer.Add(self.lt3gb3_a1, pos=(0, 0), flag=wx.EXPAND)
+        self.lt3gb3_a2 = wx.Panel(self.life3g_box3)
+        self.lt3gb3_gridsizer.Add(self.lt3gb3_a2, pos=(0, 1), flag=wx.EXPAND)
+        self.lt3gb3_a3 = wx.Panel(self.life3g_box3)
+        self.lt3gb3_gridsizer.Add(self.lt3gb3_a3, pos=(0, 2), flag=wx.EXPAND)
+        self.lt3gb3_a4 = wx.Panel(self.life3g_box3)
+        self.lt3gb3_gridsizer.Add(self.lt3gb3_a4, pos=(0, 3), flag=wx.EXPAND)
+        self.life3g_box3.Fit()
+        # a1
+        self.lt3gb3a1_gridsizer = wx.GridBagSizer(3, 1)
+        self.lt3gb3_a1.SetSizer(self.lt3gb3a1_gridsizer)
+        self.lt3g_but1 = wx.Button(self.lt3gb3_a1, -1, 'start')
+        self.lt3g_but2 = wx.Button(self.lt3gb3_a1, -1, 'stop')
+        self.lt3g_but3 = wx.Button(self.lt3gb3_a1, -1, 'clear')
+        self.lt3g_but1.Bind(wx.EVT_BUTTON, self.lt3g_start_but)
+        self.lt3g_but2.Bind(wx.EVT_BUTTON, self.lt3g_stop_but)
+        self.lt3g_but3.Bind(wx.EVT_BUTTON, self.lt3g_clear)
+        self.lt3gb3a1_gridsizer.Add(self.lt3g_but1, pos=(0, 0), flag=wx.EXPAND)
+        self.lt3gb3a1_gridsizer.Add(self.lt3g_but2, pos=(1, 0), flag=wx.EXPAND)
+        self.lt3gb3a1_gridsizer.Add(self.lt3g_but3, pos=(2, 0), flag=wx.EXPAND)
+        self.lt3gb3_a1.Fit()
         # 参数
         self.m = 3.0
         # energy_spectrum
@@ -431,6 +585,38 @@ class myFrame(wx.Frame):
             self.drawHistF_lt.clf()
             self.drawHistCanvas_lt.draw()
             self.total_counts = 0
+
+    def lt3g_start_but(self, event):
+        if self.e_start_but == 0:
+            self.dos_0.open()
+            self.run_loop_lt3g()
+            self.e_start_but = 1
+
+    def lt3g_stop_but(self, event):
+        self.dos_0.close()
+        self.e_start_but = 0
+
+    def lt3g_clear(self, event):
+        e_c_box = wx.MessageDialog(None, u"是否真的要清除显示寿命谱？", u"请确认", style=wx.OK|wx.CANCEL)
+        if e_c_box.ShowModal() == wx.ID_OK:
+            self.thr_gamma_data['c1_t'] = []
+            self.thr_gamma_data['c2_t'] = []
+            self.thr_gamma_data['c3_t'] = []
+            self.thr_gamma_data['e_1'] = []
+            self.thr_gamma_data['e_2'] = []
+            self.thr_gamma_data['e_3'] = []
+            self.thr_gamma_data['amp_1'] = []
+            self.thr_gamma_data['amp_2'] = []
+            self.thr_gamma_data['amp_3'] = []
+            self.drawHistF_life3g.clf()
+            self.drawHistCanvas_life3g.draw()
+            self.drawHistF_life3gc1.clf()
+            self.drawHistCanvas_life3gc1.draw()
+            self.drawHistF_life3gc2.clf()
+            self.drawHistCanvas_life3gc2.draw()
+            self.drawHistF_life3gc3.clf()
+            self.drawHistCanvas_life3gc3.draw()
+            self.total3g_counts = 0
 
     def e_c1_set_trlv(self,event):
         str0 = self.eb3c1_trlv.GetValue()
@@ -498,12 +684,26 @@ class myFrame(wx.Frame):
             self.lt_bins = str2
             self.counts_set = str3
 
+    def lt3gb2c1_set(self, event):
+        str0 = 1
+
+    def lt3gb2c2_set(self, event):
+        str0 = 1
+
+    def lt3gb2c3_set(self, event):
+        str0 = 1
+
     def run_loop(self):
         self.th1 = threading.Thread(target=self.loop_energy_test)
         self.th1.start()
 
     def run_loop_lt(self):
         self.th2 = threading.Thread(target=self.loop_lifetime_test)
+        # self.th2 = threading.Thread(target=self.loop_test)
+        self.th2.start()
+
+    def run_loop_lt3g(self):
+        self.th2 = threading.Thread(target=self.loop_lifetime_3gamma)
         # self.th2 = threading.Thread(target=self.loop_test)
         self.th2.start()
 
@@ -689,8 +889,8 @@ class myFrame(wx.Frame):
 
                         self.c_num_1 = self.c_num_1 + 1
 
-                        if e_2 > self.lt_start_l and e_2 < self.lt_start_r \
-                                and e_3 > self.lt_stop_l and e_3 < self.lt_stop_r :
+                        if e_2 > self.lt3gc2_d and e_2 < self.lt3gc2_u \
+                                and e_3 > self.lt3gc3_d and e_3 < self.lt3gc3_u :
                             self.thr_gamma_data['c1_t'].append(c1_t)
                             self.thr_gamma_data['c2_t'].append(c2_t)
                             self.thr_gamma_data['c3_t'].append(c3_t)
@@ -730,8 +930,8 @@ class myFrame(wx.Frame):
                     amp_3 = t3.get_amplitude()
                     c3_t = t3.get_time_cfd_linear(self.stop_fraction)
                     self.c_num_1 = self.c_num_1 + 1
-                    if e_2 > self.lt_start_l and e_2 < self.lt_start_r \
-                            and e_3 > self.lt_stop_l and e_3 < self.lt_stop_r:
+                    if e_2 > self.lt3gc2_d and e_2 < self.lt3gc2_u \
+                            and e_3 > self.lt3gc3_d and e_3 < self.lt3gc3_u:
                         self.thr_gamma_data['c1_t'].append(c1_t)
                         self.thr_gamma_data['c2_t'].append(c2_t)
                         self.thr_gamma_data['c3_t'].append(c3_t)
@@ -750,11 +950,31 @@ class myFrame(wx.Frame):
                     #     c_num_2 = c_num_2 + 1
                     #     self.total_counts = self.total_counts + 1
                 if self.c_num_1 % 1000 == 0:
-                    self.drawHistF_lt.clf()
-                    self.a_lt = self.drawHistF_lt.add_subplot(111)
-                    self.h_lifetime = self.a_lt.hist(self.lifetime, self.lt_bins, range=(self.lt_l, self.lt_r))
-                    self.a_lt.semilogy()
-                    self.drawHistCanvas_lt.draw()
+                    # self.drawHistF_lt.clf()
+                    # self.a_lt = self.drawHistF_lt.add_subplot(111)
+                    # self.h_lifetime = self.a_lt.hist(self.lifetime, self.lt_bins, range=(self.lt_l, self.lt_r))
+                    # self.a_lt.semilogy()
+                    # self.drawHistCanvas_lt.draw()
+                    self.drawHistF_life3g.clf()
+                    self.a_2d = self.drawHistF_life3g.add_subplot(111)
+                    self.h_e2d = self.a_2d.hist2d(self.thr_gamma_data['e_2'], self.thr_gamma_data['e_3'], bins=100,\
+                        range=[[self.lt3gc2_l, self.lt3gc2_r], [self.lt3gc3_l, self.lt3gc3_r]])
+                    self.drawHistCanvas_life3g.draw()
+                    self.drawHistF_life3gc1.clf()
+                    self.a_e_c1 = self.drawHistF_life3gc1.add_subplot(111)
+                    self.h_ec1 = self.a_e_c1.hist(self.thr_gamma_data['e_1'], bins=100,
+                                                  range=[self.lt3gc1_l, self.lt3gc1_r])
+                    self.drawHistCanvas_life3gc1.draw()
+                    self.drawHistF_life3gc2.clf()
+                    self.a_e_c2 = self.drawHistF_life3gc2.add_subplot(111)
+                    self.h_ec2 = self.a_e_c2.hist(self.thr_gamma_data['e_2'], bins=100,
+                                                  range=[self.lt3gc2_l, self.lt3gc2_r])
+                    self.drawHistCanvas_life3gc2.draw()
+                    self.drawHistF_life3gc3.clf()
+                    self.a_e_c3 = self.drawHistF_life3gc3.add_subplot(111)
+                    self.h_ec3 = self.a_e_c3.hist(self.thr_gamma_data['e_3'], bins=100,
+                                                  range=[self.lt3gc3_l, self.lt3gc3_r])
+                    self.drawHistCanvas_life3gc3.draw()
                 t_02 = time.time()
                 self.cps = c_num_2/(t_02 - t_01)
                 self.lt_cps_text.SetValue(str(int(self.cps)))
