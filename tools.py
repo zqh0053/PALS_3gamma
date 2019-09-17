@@ -1,7 +1,7 @@
 import numpy as np
 class Wavetools():
     #
-    def __init__(self, time0, voltage0, basenum = 800):
+    def __init__(self, time0, voltage0, basenum=800):
         self.time0 = time0
         self.voltage0 = voltage0
         self.basenum = basenum
